@@ -582,6 +582,10 @@ function(dpf__build_lv2 NAME HAS_UI MONOLITHIC EXTRA_UI_LINK_OPTS)
     OUTPUT_NAME "${NAME}_dsp"
     PREFIX "")
 
+  # helper property for custom outside handling
+  set_target_properties("${NAME}" PROPERTIES
+    LV2_BUNDLE "${PROJECT_BINARY_DIR}/bin/${NAME}.lv2")
+
   if(HAS_UI)
     if(MONOLITHIC)
       dpf__add_ui_main("${NAME}-lv2" "lv2" "${HAS_UI}")
