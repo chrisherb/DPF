@@ -171,8 +171,13 @@ all: $(TARGETS)
 cairo:   $(BUILD_DIR)/libdgl-cairo.a
 gles2:   $(BUILD_DIR)/libdgl-gles2.a
 gles3:   $(BUILD_DIR)/libdgl-gles3.a
+ifeq ($(WASM),true)
+opengl:  gles2
+opengl3: gles3
+else
 opengl:  $(BUILD_DIR)/libdgl-opengl.a
 opengl3: $(BUILD_DIR)/libdgl-opengl3.a
+endif
 stub:    $(BUILD_DIR)/libdgl-stub.a
 vulkan:  $(BUILD_DIR)/libdgl-vulkan.a
 web:     $(BUILD_DIR)/libdgl-web.a

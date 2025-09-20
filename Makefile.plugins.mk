@@ -205,7 +205,11 @@ UI_TYPE = none
 endif
 
 ifeq ($(UI_TYPE),)
+ifeq ($(WASM),true)
+UI_TYPE = gles2
+else
 UI_TYPE = opengl
+endif
 endif
 
 ifeq ($(UI_TYPE),generic)
