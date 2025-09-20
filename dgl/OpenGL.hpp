@@ -249,6 +249,18 @@ public:
     */
     void drawAt(const GraphicsContext& context, const Point<int>& pos) override;
 
+   #ifdef DGL_USE_GLES
+   /**
+      Get the image format.
+    */
+    ImageFormat getFormat() const noexcept;
+
+   /**
+      Get the raw image data.
+    */
+    const char* getRawData() const noexcept;
+   #endif
+
    /**
       TODO document this.
     */
@@ -312,6 +324,10 @@ private:
     bool setupCalled;
     bool textureInit;
     GLuint textureId;
+   #ifdef DGL_USE_GLES
+    mutable char* convertedData;
+    mutable const char* rawDataLast;
+   #endif
 };
 
 // --------------------------------------------------------------------------------------------------------------------

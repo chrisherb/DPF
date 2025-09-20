@@ -37,6 +37,10 @@ OpenGLImage::OpenGLImage()
       setupCalled(false),
       textureInit(false),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
 }
 
@@ -45,6 +49,10 @@ OpenGLImage::OpenGLImage(const char* const rdata, const uint w, const uint h, co
       setupCalled(false),
       textureInit(true),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
     glGenTextures(1, &textureId);
     DISTRHO_SAFE_ASSERT(textureId != 0);
@@ -55,6 +63,10 @@ OpenGLImage::OpenGLImage(const char* const rdata, const Size<uint>& s, const Ima
       setupCalled(false),
       textureInit(true),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
     glGenTextures(1, &textureId);
     DISTRHO_SAFE_ASSERT(textureId != 0);
@@ -65,6 +77,10 @@ OpenGLImage::OpenGLImage(const OpenGLImage& image)
       setupCalled(false),
       textureInit(true),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
     glGenTextures(1, &textureId);
     DISTRHO_SAFE_ASSERT(textureId != 0);
@@ -74,6 +90,10 @@ OpenGLImage::~OpenGLImage()
 {
     if (textureId != 0)
         glDeleteTextures(1, &textureId);
+
+   #ifdef DGL_USE_GLES
+    std::free(convertedData);
+   #endif
 }
 
 void OpenGLImage::loadFromMemory(const char* const rdata, const Size<uint>& s, const ImageFormat fmt) noexcept
@@ -111,6 +131,10 @@ OpenGLImage::OpenGLImage(const char* const rdata, const uint w, const uint h, co
       setupCalled(false),
       textureInit(true),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
     glGenTextures(1, &textureId);
     DISTRHO_SAFE_ASSERT(textureId != 0);
@@ -121,6 +145,10 @@ OpenGLImage::OpenGLImage(const char* const rdata, const Size<uint>& s, const GLe
       setupCalled(false),
       textureInit(true),
       textureId(0)
+   #ifdef DGL_USE_GLES
+    , convertedData(nullptr)
+    , rawDataLast(nullptr)
+    #endif
 {
     glGenTextures(1, &textureId);
     DISTRHO_SAFE_ASSERT(textureId != 0);
