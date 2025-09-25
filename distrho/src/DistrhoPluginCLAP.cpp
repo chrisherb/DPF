@@ -1,6 +1,6 @@
 /*
  * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2024 Filipe Coelho <falktx@falktx.com>
+ * Copyright (C) 2012-2025 Filipe Coelho <falktx@falktx.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
@@ -314,7 +314,7 @@ public:
 
     bool getResizeHints(clap_gui_resize_hints_t* const hints) const
     {
-        if (canResize())
+        if (fUI != nullptr && fUI->isResizable())
         {
             uint minimumWidth, minimumHeight;
             bool keepAspectRatio;
@@ -346,7 +346,7 @@ public:
 
     bool adjustSize(uint32_t* const width, uint32_t* const height) const
     {
-        if (canResize())
+        if (fUI != nullptr && fUI->isResizable())
         {
             uint minimumWidth, minimumHeight;
             bool keepAspectRatio;
