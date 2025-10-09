@@ -319,7 +319,7 @@ HAVE_DGL   = false
 endif
 endif
 
-ifeq ($(HAVE_DGL)$(LINUX)$(UI_TYPE),truetruewebview)
+ifeq ($(HAVE_DGL)$(LINUX)$(USE_WEB_VIEW),truetruetrue)
 DGL_LIB_SHARED = $(shell $(CC) -print-file-name=Scrt1.o)
 endif
 
