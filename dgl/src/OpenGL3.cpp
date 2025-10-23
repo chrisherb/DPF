@@ -562,6 +562,70 @@ void OpenGLImage::drawAt(const GraphicsContext& context, const Point<int>& pos)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+#ifdef DGL_USE_GLES
+ImageFormat OpenGLImage::getFormat() const noexcept
+{
+    switch (format)
+    {
+    case kImageFormatBGR:
+        return kImageFormatRGB;
+    case kImageFormatBGRA:
+        return kImageFormatRGBA;
+    default:
+        return format;
+    }
+}
+
+const char* OpenGLImage::getRawData() const noexcept
+{
+    if (rawDataLast != rawData)
+    {
+        if (format == kImageFormatBGR || format == kImageFormatBGRA)
+        {
+            const uint w = size.getWidth();
+            const uint h = size.getHeight();
+
+            std::free(convertedData);
+
+            if (format == kImageFormatBGR)
+            {
+                convertedData = static_cast<char*>(std::malloc(sizeof(char) * 3 * w * h));
+                for (int i = 0; i < w * h; ++i)
+                {
+                    convertedData[i * 3 + 0] = rawData[i * 3 + 2];
+                    convertedData[i * 3 + 1] = rawData[i * 3 + 1];
+                    convertedData[i * 3 + 2] = rawData[i * 3 + 0];
+                }
+            }
+            else
+            {
+                convertedData = static_cast<char*>(std::malloc(sizeof(char) * 4 * w * h));
+                for (int i = 0; i < w * h; ++i)
+                {
+                    convertedData[i * 4 + 0] = rawData[i * 4 + 2];
+                    convertedData[i * 4 + 1] = rawData[i * 4 + 1];
+                    convertedData[i * 4 + 2] = rawData[i * 4 + 0];
+                    convertedData[i * 4 + 3] = rawData[i * 4 + 3];
+                }
+            }
+        }
+        else
+        {
+            std::free(convertedData);
+            convertedData = nullptr;
+        }
+
+        rawDataLast = rawData;
+    }
+
+    return
+     #ifdef DGL_USE_GLES
+      convertedData != nullptr ? convertedData :
+     #endif
+      rawData;
+}
+#endif
+
 #ifdef DGL_ALLOW_DEPRECATED_METHODS
 void OpenGLImage::draw()
 {
@@ -633,6 +697,9 @@ void ImageBaseKnob<OpenGLImage>::onDisplay()
     // GLES does not support BGR
     DISTRHO_SAFE_ASSERT_RETURN(imageFormat != kImageFormatBGR && imageFormat != kImageFormatBGRA,);
    #endif
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     const GLfloat color[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     glUniform4fv(gl3context.color, 1, color);
@@ -748,6 +815,8 @@ void ImageBaseKnob<OpenGLImage>::onDisplay()
     glUniform1i(gl3context.usingTexture, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    glDisable(GL_BLEND);
 }
 
 template class ImageBaseKnob<OpenGLImage>;

@@ -668,13 +668,9 @@ endif
 
 ifeq ($(USE_GLES2),true)
 BUILD_CXX_FLAGS += -DDGL_USE_OPENGL3 -DDGL_USE_GLES -DDGL_USE_GLES2
-endif
-
-ifeq ($(USE_GLES3),true)
+else ifeq ($(USE_GLES3),true)
 BUILD_CXX_FLAGS += -DDGL_USE_OPENGL3 -DDGL_USE_GLES -DDGL_USE_GLES3
-endif
-
-ifeq ($(USE_OPENGL3),true)
+else ifeq ($(USE_OPENGL3),true)
 BUILD_CXX_FLAGS += -DDGL_USE_OPENGL3
 endif
 

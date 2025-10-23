@@ -834,10 +834,10 @@ static int glnvg__renderCreateTexture(void* uptr, int type, int w, int h, int im
 		tex->data = (uint8_t*)malloc(sizeof(uint8_t) * 4 * w * h);
 		for (int i = 0; i < w * h; ++i)
 		{
-			tex->data[i*3+0] = data[i*3+3];
-			tex->data[i*3+1] = data[i*3+2];
-			tex->data[i*3+2] = data[i*3+1];
-			tex->data[i*3+3] = data[i*3+0];
+			tex->data[i*4+0] = data[i*4+2];
+			tex->data[i*4+1] = data[i*4+1];
+			tex->data[i*4+2] = data[i*4+0];
+			tex->data[i*4+3] = data[i*4+3];
 		}
 		data = tex->data;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
